@@ -1,0 +1,5 @@
+
+spring.application.name=product-service
+spring.config.import=configserver:http://localhost:7082
+spring.application.cloud.username=root
+spring.application.cloud.password=s3cr3t
