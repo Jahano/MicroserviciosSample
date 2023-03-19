@@ -1,5 +1,4 @@
 
-
 spring:
   application:
     name: registry-service
@@ -8,3 +7,4 @@ spring:
       uri: http://localhost:7082
       username: root
       password: s3cr3t
+
