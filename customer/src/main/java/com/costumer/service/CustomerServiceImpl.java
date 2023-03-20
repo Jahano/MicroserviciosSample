@@ -15,51 +15,54 @@ public class CustomerServiceImpl implements CustomerService{
     @Autowired
     private CustomerRepository customerRepository;
     @Override
-    public List<Customer> listAllProduct() {
-
+    public List<Customer> findCustomerAll() {
         return customerRepository.findAll();
     }
 
     @Override
-    public Customer getCustomer(Long id) {
-        return customerRepository.findById(id).orElseGet(null);
+    public List<Customer> findCustomersByRegion(Region region) {
+        return customerRepository.findByRegion(region);
     }
 
     @Override
     public Customer createCustomer(Customer customer) {
+
+        Customer customerDB = customerRepository.findByNumberID ( customer.getNumberID () );
+        if (customerDB != null){
+            return  customerDB;
+        }
+
         customer.setState("CREATED");
-        return customerRepository.save(customer);
+        customerDB = customerRepository.save ( customer );
+        return customerDB;
     }
 
     @Override
     public Customer updateCustomer(Customer customer) {
-        Customer customerDb = customerRepository.findById(customer.getId()).orElseGet(null);
-        if(customerDb == null){
-            return null;
+        Customer customerDB = getCustomer(customer.getId());
+        if (customerDB == null){
+            return  null;
         }
-        customerDb.setNumberId(customer.getNumberId());
-        customerDb.setFirstName(customer.getFirstName());
-        customerDb.setLastName(customer.getLastName());
-        customerDb.setState(customer.getState());
-        customerDb.setEmail(customer.getEmail());
-        customerDb.setRegion(customer.getRegion());
-        customerDb.setPhotoUrl(customer.getPhotoUrl());
-        return customerRepository.save(customerDb);
+        customerDB.setFirstName(customer.getFirstName());
+        customerDB.setLastName(customer.getLastName());
+        customerDB.setEmail(customer.getEmail());
+        customerDB.setPhotoUrl(customer.getPhotoUrl());
+
+        return  customerRepository.save(customerDB);
     }
 
     @Override
-    public Customer deleteCustomer(Long id) {
-        Customer customerDb = customerRepository.findById(id).orElseGet(null);
-        if(customerDb == null){
-            return null;
+    public Customer deleteCustomer(Customer customer) {
+        Customer customerDB = getCustomer(customer.getId());
+        if (customerDB ==null){
+            return  null;
         }
-        customerDb.setState("DELETED");
-        return customerRepository.save(customerDb);
+        customer.setState("DELETED");
+        return customerRepository.save(customer);
     }
 
     @Override
-    public List<Customer> findByRegion(Region region) {
-
-        return customerRepository.findByRegion(region);
+    public Customer getCustomer(Long id) {
+        return  customerRepository.findById(id).orElse(null);
     }
 }

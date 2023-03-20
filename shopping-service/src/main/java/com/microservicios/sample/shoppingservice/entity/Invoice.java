@@ -1,7 +1,11 @@
 package com.microservicios.sample.shoppingservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.microservicios.sample.shoppingservice.model.Customer;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -11,7 +15,9 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "tlb_invoices")
+@Table(name = "tbl_invoices")
+@AllArgsConstructor
+@Builder
 public class Invoice {
 
 
@@ -39,6 +45,9 @@ public class Invoice {
     private List<InvoiceItem> items;
 
     private String state;
+
+    @Transient
+    private Customer customer;
 
     public Invoice() {
         items = new ArrayList<>();

@@ -7,6 +7,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "tbl_customers")
@@ -14,27 +18,36 @@ import javax.persistence.*;
 @AllArgsConstructor @NoArgsConstructor
 @Builder
 public class Customer {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "number_id")
-    private String numberId;
+    @NotEmpty(message = "El número de documento no puede ser vacío")
+    @Size( min = 8 , max = 8, message = "El tamaño del número de documento es 8")
+    @Column(name = "number_id" , unique = true ,length = 8, nullable = false)
+    private String numberID;
 
-    @Column(name = "first_name")
+    @NotEmpty(message = "El nombre no puede ser vacío")
+    @Column(name="first_name", nullable=false)
     private String firstName;
-    @Column(name = "last_name")
+
+    @NotEmpty(message = "El apellido no puede ser vacío")
+    @Column(name="last_name", nullable=false)
     private String lastName;
 
+    @NotEmpty(message = "el correo no puede estar vacío")
+    @Email(message = "no es un dirección de correo bien formada")
+    @Column(unique=true, nullable=false)
     private String email;
 
-    @Column(name = " photo_url")
-    private String  photoUrl;
+    @Column(name="photo_url")
+    private String photoUrl;
 
+
+    @NotNull(message = "la región no puede ser vacia")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "region_id")
-    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     private Region region;
 
     private String state;
